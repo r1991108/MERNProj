@@ -63,9 +63,13 @@ router.get("/student/:_student_id", (req, res) => {
 // searching for courses
 router.get("/findByName/:name", (req, res) => {
   let { name } = req.params;
-  Course.find({ title: name })
+
+  // Course.find({ title: name })
+  Course.find({ title: new RegExp(name) })
     .populate("instructor", ["username", "email"])
     .then((data) => {
+      console.log("succeed");
+      console.log(data);
       res.status(200).send(data);
     })
     .catch((e) => {
@@ -81,9 +85,6 @@ router.post("/enroll/:_id", async (req, res) => {
   try {
     // console.log("try");
     let course = await Course.findOne({ _id });
-    // console.log("1 >" + Array.isArray(course));
-    // console.log("1 >" + course.students);
-    // console.log("1 >" + course[students]);
     course.students.push(user_id);
     await course.save();
     // console.log("2 >" + course.students);
