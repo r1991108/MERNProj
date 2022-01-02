@@ -34,12 +34,14 @@ router.get("/:_id", (req, res) => {
     });
 });
 
-// searching for instructor
+// searching for instructor's course
 router.get("/instructor/:_instructor_id", (req, res) => {
   let { _instructor_id } = req.params;
-  Course.find({ _instructor_id })
+  // console.log(_instructor_id);
+  Course.find({ instructor: _instructor_id })
     .populate("instructor", ["username", "email"])
     .then((data) => {
+      // console.log(data);
       res.status(200).send(data);
     })
     .catch((e) => {

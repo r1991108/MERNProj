@@ -9,6 +9,7 @@ const CourseComponent = (props) => {
     navigate("/login");
   };
   let [courseData, setCourseData] = useState(null);
+  let [message, setMessage] = useState("");
   useEffect(() => {
     console.log("using effect.");
     let _id;
@@ -19,9 +20,16 @@ const CourseComponent = (props) => {
     }
 
     if (currentUser.user.role == "instructor") {
+      // console.log("id=" + _id);
       CourseService.get(_id)
         .then((data) => {
-          setCourseData(data.data);
+          if (data.data.length == 0) {
+            console.log(data);
+            setMessage("You haven't posted a course yet");
+          } else {
+            console.log(data);
+            setCourseData(data.data);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -30,8 +38,13 @@ const CourseComponent = (props) => {
       // console.log("getting data for student");
       CourseService.getEnrolledCourses(_id)
         .then((data) => {
-          console.log(data);
-          setCourseData(data.data);
+          if (data.data.length == 0) {
+            console.log(data);
+            setMessage("You haven't rolled a course yet");
+          } else {
+            console.log(data);
+            setCourseData(data.data);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -54,12 +67,12 @@ const CourseComponent = (props) => {
       )}
       {currentUser && currentUser.user.role == "instructor" && (
         <div>
-          <h1>Welcome to instructor's page.</h1>
+          <h1>Welcome to {currentUser.user.username}'s page.</h1>
         </div>
       )}
       {currentUser && currentUser.user.role == "student" && (
         <div>
-          <h1>Welcome to student's page.</h1>
+          <h1>Welcome to {currentUser.user.username}'s page.</h1>
         </div>
       )}
       {currentUser && courseData && courseData.length != 0 && (
@@ -81,6 +94,8 @@ const CourseComponent = (props) => {
           ))}
         </div>
       )}
+
+      {message && <div className="alert alert-danger">{message}</div>}
     </div>
   );
 };
