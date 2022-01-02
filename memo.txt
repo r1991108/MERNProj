@@ -1,0 +1,12 @@
+npm install express mongoose dotenv nodmon bcrypt
+
+// data validator for Javascript
+npm install joi
+npm install cors
+
+
+--------------------------------
+npx create-react-app client
+
+npm install react-router-dom
+npm install axios
