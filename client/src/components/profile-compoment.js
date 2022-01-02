@@ -11,10 +11,10 @@ const ProfileComponent = (props) => {
       )}
       {currentUser && (
         <div>
-          <h1>in profile page.</h1>
+          <h1>Welcome to Profile page.</h1>
           <header className="jumbotron">
             <h3>
-              <strong>{currentUser.user.username}</strong>
+              <strong>Account name : {currentUser.user.username}</strong>
             </h3>
           </header>
           <p>
@@ -24,7 +24,7 @@ const ProfileComponent = (props) => {
             <strong>Id: {currentUser.user._id}</strong>
           </p>
           <p>
-            <strong>email: {currentUser.user.email}</strong>
+            <strong>Email: {currentUser.user.email}</strong>
           </p>
         </div>
       )}

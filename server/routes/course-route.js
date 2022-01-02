@@ -68,8 +68,8 @@ router.get("/findByName/:name", (req, res) => {
   Course.find({ title: new RegExp(name) })
     .populate("instructor", ["username", "email"])
     .then((data) => {
-      console.log("succeed");
-      console.log(data);
+      // console.log("succeed");
+      // console.log(data);
       res.status(200).send(data);
     })
     .catch((e) => {

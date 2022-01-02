@@ -18,6 +18,9 @@ const EnrollComponent = (props) => {
     CourseService.getCourseByName(searchInput)
       .then((data) => {
         console.log(data);
+        if (data.data.length == 0) {
+          setMessage("The course you're searching is not existing");
+        }
         setSearchResult(data.data);
       })
       .catch((err) => {
