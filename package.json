@@ -1,17 +1,17 @@
 {
-  "name": "nishkarshraj",
+  "name": "chen bing nan",
   "version": "1.0.6",
-  "description": "Simple Checklist",
+  "description": "mern project demo",
   "main": "server/index.js",
   "scripts": {
     "start": "node ./server/index.js",
     "server": "node ./server/index.js",
-    "client": "npm run start_client --prefix client",
+    "client": "npm run start --prefix client",
     "dev2": "concurrently \"npm run server\" \"npm run client\"",
     "dev": "concurrently \"npm run preload_dotenv --prefix server\" \"npm run client\"",
     "build": "npm run build --prefix client"
   },
-  "author": "Nishkarsh Raj",
+  "author": "chen bing nan Raj",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
