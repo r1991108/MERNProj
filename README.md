@@ -2,7 +2,7 @@
 a practice for MERN project
 
 # Getting start
-clone the project source
+### clone the project source
 $ `git clone https://github.com/r1991108/MERNProj.git`
 ## install modules that are required for running the project
 $ `cd ~MERNProj/`
