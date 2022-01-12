@@ -1,15 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
 import CourseService from "../services/course-service";
 
 const CourseComponent = (props) => {
   let { currentUser, setCurrentUser } = props;
+  let [courseData, setCourseData] = useState(null);
+  let [openModal, setOpenModal] = useState(false);
+  let [title, setTitle] = useState("");
+  let [description, setDescription] = useState("");
+  let [price, setPrice] = useState(0);
+  let [courseId, setCourseId] = useState(0);
+  let [message, setMessage] = useState("");
+
   const navigate = useNavigate();
   const handleTakeToLogin = () => {
     navigate("/login");
   };
-  let [courseData, setCourseData] = useState(null);
-  let [message, setMessage] = useState("");
+  const handleUpdateClassInfo = (e) => {
+    console.log("handleUpdateClassInfo");
+    console.log(e.target.parentElement.attributes.courseId.value);
+    setDescription(e.target.parentElement.attributes.description.value);
+    setPrice(e.target.parentElement.attributes.price.value);
+    setTitle(e.target.parentElement.attributes.title.value);
+    setCourseId(e.target.parentElement.attributes.courseId.value);
+
+    setOpenModal(true);
+  };
+  const handleCancelChange = (e) => {
+    console.log("handleCancelChange");
+    setOpenModal(false);
+  };
+
+  const handleCommitChange = async (e) => {
+    console.log("handleCommitChange");
+    await CourseService.editClassInfo(courseId, title, description, price)
+      .then()
+      .catch((err) => {
+        console.log(err);
+      });
+    setOpenModal(false);
+    // window.location.reload();
+  };
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleChangeDesciption = (e) => {
+    setDescription(e.target.value);
+  };
+  const handleChangePrice = (e) => {
+    setPrice(e.target.value);
+  };
+
   useEffect(() => {
     console.log("using effect.");
     let _id;
@@ -50,13 +92,13 @@ const CourseComponent = (props) => {
           console.log(error);
         });
     }
-  }, []);
+  }, [openModal]);
 
   return (
     <div style={{ padding: "3rem" }}>
       {!currentUser && (
         <div>
-          <p>You must login before seeing your courses.</p>
+          <p>You must login before checking your courses.</p>
           <button
             onClick={handleTakeToLogin}
             className="btn btn-primary btn-lg"
@@ -88,11 +130,79 @@ const CourseComponent = (props) => {
                   <p>Instructor : {course.instructor.username}</p>
                   <p>Total students : {course.students.length}</p>
                   <p>Price : {course.price}</p>
+                  <div
+                    courseId={course._id}
+                    title={course.title}
+                    description={course.description}
+                    price={course.price}
+                  >
+                    {/* edit button*/}
+                    {currentUser.user.role == "instructor" && (
+                      <button
+                        onClick={handleUpdateClassInfo}
+                        type="button"
+                        className="btn btn-dark"
+                      >
+                        Edit Class
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+      )}
+      {openModal == true && (
+        <Modal.Dialog
+        // size="lg"
+        // aria-labelledby="contained-modal-title-vcenter"
+        // centered
+        >
+          <Modal.Header>
+            <Modal.Title>Title </Modal.Title>
+            <input
+              name="title"
+              type="text"
+              className="form-control"
+              id="exampleforTitle"
+              onChange={handleChangeTitle}
+              defaultValue={title}
+            />
+          </Modal.Header>
+
+          <Modal.Body>
+            Content
+            <input
+              name="title"
+              type="text"
+              className="form-control"
+              id="exampleforTitle"
+              onChange={handleChangeDesciption}
+              defaultValue={description}
+            />
+          </Modal.Body>
+          <Modal.Body>
+            Price
+            <input
+              name="title"
+              type="text"
+              className="form-control"
+              id="exampleforTitle"
+              onChange={handleChangePrice}
+              defaultValue={price}
+            />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={handleCancelChange} variant="secondary">
+              Close
+            </Button>
+            <Button onClick={handleCommitChange} variant="primary">
+              Save changes
+            </Button>
+          </Modal.Footer>
+        </Modal.Dialog>
       )}
 
       {message && <div className="alert alert-danger">{message}</div>}

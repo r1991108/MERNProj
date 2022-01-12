@@ -126,8 +126,9 @@ router.post("/", async (req, res) => {
 
 router.patch("/:_id", async (req, res) => {
   //validate the inputs before making a new course
+  console.log("patch");
   const { error } = courseValidation(req.body);
-  if (error) return res.status(400) / send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
 
   let { _id } = req.params;
   let course = await Course.findOne({ _id });

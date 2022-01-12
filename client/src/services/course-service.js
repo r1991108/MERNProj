@@ -71,6 +71,28 @@ class CourseService {
       { headers: { Authorization: token } }
     );
   }
+
+  editClassInfo(courseId, title, description, price) {
+    let token;
+    if (localStorage.getItem("user")) {
+      token = JSON.parse(localStorage.getItem("user")).token;
+    } else {
+      token = "";
+    }
+    console.log(
+      courseId,
+      title,
+      description,
+      price,
+      API_URL + "/" + courseId,
+      token
+    );
+    return axios.patch(
+      API_URL + "/" + courseId,
+      { title, description, price },
+      { headers: { Authorization: token } }
+    );
+  }
 }
 
 export default new CourseService();

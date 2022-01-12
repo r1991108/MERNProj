@@ -9,6 +9,7 @@ import authService from "./services/auth.service";
 import CourseComponent from "./components/course-component";
 import PostCourseComponent from "./components/postCourse-component";
 import EnrollComponent from "./components/enroll-component";
+import EditCourseComponent from "./components/editCourse-component";
 
 function App() {
   let [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
@@ -63,6 +64,16 @@ function App() {
           path="/enroll"
           element={
             <EnrollComponent
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/editClass"
+          element={
+            <EditCourseComponent
               currentUser={currentUser}
               setCurrentUser={setCurrentUser}
             />
