@@ -1,7 +1,7 @@
-# MERNProj
-a practice for MERN project
+# ・MERNProj
+a practice for MERN project (demo of a simple internet leaning website)
 
-# Getting start
+# ・Getting start
 ### clone the project source
 $ `git clone https://github.com/r1991108/MERNProj.git`
 ### install modules that are required for running the project
@@ -15,7 +15,7 @@ $ `npm install`
 $ `cd ~MERNProj/`
 $ `npm run dev`
 
-# Docker Development run
+# ・Docker Development run
 If you would like to run the development tools inside of a docker container, you can set up a local Docker development environment by building the image:
 *besure to delete node_modules under ./server before you doing the following step or it will possibly fail
 ### build image
