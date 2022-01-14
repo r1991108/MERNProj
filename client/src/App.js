@@ -13,7 +13,7 @@ import EnrollComponent from "./components/enroll-component";
 function App() {
   let [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
   return (
-    <div>
+    <>
       <NavComponent currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <Routes>
         <Route exact path="/" element={<HomeComponent />} />
@@ -69,7 +69,7 @@ function App() {
           }
         />
       </Routes>
-    </div>
+    </>
   );
 }
 

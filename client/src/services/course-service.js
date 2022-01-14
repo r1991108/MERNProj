@@ -72,7 +72,7 @@ class CourseService {
     );
   }
 
-  editClassInfo(courseId, title, description, price) {
+  editCourseInfo(courseId, title, description, price) {
     let token;
     if (localStorage.getItem("user")) {
       token = JSON.parse(localStorage.getItem("user")).token;
@@ -90,6 +90,21 @@ class CourseService {
     return axios.patch(
       API_URL + "/" + courseId,
       { title, description, price },
+      { headers: { Authorization: token } }
+    );
+  }
+
+  removeStudentFromCourse(courseId, studentId) {
+    let token;
+    if (localStorage.getItem("user")) {
+      token = JSON.parse(localStorage.getItem("user")).token;
+    } else {
+      token = "";
+    }
+    console.log(courseId, studentId, API_URL + "/" + courseId, token);
+    return axios.patch(
+      API_URL + "/removeStudentFromCourse/" + courseId,
+      { studentId },
       { headers: { Authorization: token } }
     );
   }

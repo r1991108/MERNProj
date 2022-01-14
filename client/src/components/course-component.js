@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import CourseService from "../services/course-service";
-
+import { Popconfirm, message } from "antd";
+import "antd/dist/antd.min.css";
 const CourseComponent = (props) => {
   let { currentUser, setCurrentUser } = props;
   let [courseData, setCourseData] = useState(null);
@@ -17,16 +18,36 @@ const CourseComponent = (props) => {
   const handleTakeToLogin = () => {
     navigate("/login");
   };
-  const handleUpdateClassInfo = (e) => {
-    console.log("handleUpdateClassInfo");
-    console.log(e.target.parentElement.attributes.courseId.value);
-    setDescription(e.target.parentElement.attributes.description.value);
-    setPrice(e.target.parentElement.attributes.price.value);
-    setTitle(e.target.parentElement.attributes.title.value);
-    setCourseId(e.target.parentElement.attributes.courseId.value);
 
+  // while an instructor click update course button
+  const handleUpdateCourseInfo = (courseId, title, description, price) => {
+    console.log(
+      "handleUpdateCourseInfo: ",
+      courseId,
+      title,
+      description,
+      price
+    );
+    setDescription(description);
+    setPrice(price);
+    setTitle(title);
+    setCourseId(courseId);
     setOpenModal(true);
   };
+  const confirmCancelCourse = async (courseId) => {
+    console.log("cancelling the course");
+    await CourseService.removeStudentFromCourse(courseId, currentUser.user._id)
+      .then()
+      .catch((err) => {
+        console.log(err);
+      });
+    window.location.reload();
+  };
+
+  const handleCancelCourse = (e) => {
+    setOpenModal(true);
+  };
+
   const handleCancelChange = (e) => {
     console.log("handleCancelChange");
     setOpenModal(false);
@@ -34,7 +55,7 @@ const CourseComponent = (props) => {
 
   const handleCommitChange = async (e) => {
     console.log("handleCommitChange");
-    await CourseService.editClassInfo(courseId, title, description, price)
+    await CourseService.editCourseInfo(courseId, title, description, price)
       .then()
       .catch((err) => {
         console.log(err);
@@ -67,7 +88,7 @@ const CourseComponent = (props) => {
         .then((data) => {
           if (data.data.length == 0) {
             console.log(data);
-            setMessage("You haven't posted a course yet");
+            setMessage("You haven't posted any course yet");
           } else {
             console.log(data);
             setCourseData(data.data);
@@ -82,7 +103,7 @@ const CourseComponent = (props) => {
         .then((data) => {
           if (data.data.length == 0) {
             console.log(data);
-            setMessage("You haven't rolled a course yet");
+            setMessage("You haven't rolled any course yet");
           } else {
             console.log(data);
             setCourseData(data.data);
@@ -93,6 +114,31 @@ const CourseComponent = (props) => {
         });
     }
   }, [openModal]);
+
+  useEffect(() => {
+    if (currentUser.user.role == "student") {
+      let _id;
+      if (currentUser) {
+        _id = currentUser.user._id;
+      } else {
+        _id = "";
+      }
+      // console.log("getting data for student");
+      CourseService.getEnrolledCourses(_id)
+        .then((data) => {
+          if (data.data.length == 0) {
+            console.log(data);
+            setMessage("You haven't rolled any course yet");
+          } else {
+            console.log(data);
+            setCourseData(data.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [courseData]);
 
   return (
     <div style={{ padding: "3rem" }}>
@@ -139,12 +185,38 @@ const CourseComponent = (props) => {
                     {/* edit button*/}
                     {currentUser.user.role == "instructor" && (
                       <button
-                        onClick={handleUpdateClassInfo}
+                        onClick={() => {
+                          handleUpdateCourseInfo(
+                            course._id,
+                            course.title,
+                            course.description,
+                            course.price
+                          );
+                        }}
                         type="button"
                         className="btn btn-dark"
                       >
-                        Edit Class
+                        Edit Course
                       </button>
+                    )}
+                    {/* { while a student click cancel course button} */}
+                    {currentUser.user.role == "student" && (
+                      <Popconfirm
+                        title="Are you sure to delete this task?"
+                        onConfirm={() => {
+                          confirmCancelCourse(course._id);
+                        }}
+                        onCancel={() => {
+                          console.log("cancel confirm");
+                        }}
+                        okText="yes"
+                        cancelText="No"
+                        type="button"
+                        className="btn btn-dark"
+                        courseId={course._id}
+                      >
+                        cancel Course
+                      </Popconfirm>
                     )}
                   </div>
                 </div>
@@ -153,12 +225,8 @@ const CourseComponent = (props) => {
           ))}
         </div>
       )}
-      {openModal == true && (
-        <Modal.Dialog
-        // size="lg"
-        // aria-labelledby="contained-modal-title-vcenter"
-        // centered
-        >
+      {openModal == true && currentUser.user.role == "instructor" && (
+        <Modal.Dialog>
           <Modal.Header>
             <Modal.Title>Title </Modal.Title>
             <input

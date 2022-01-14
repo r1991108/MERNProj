@@ -8,6 +8,14 @@ router.use((req, res, next) => {
   next();
 });
 
+// test API connection
+router.get("/testAPI", (req, res) => {
+  const msgObj = {
+    message: "test API is working.",
+  };
+  return res.json(msgObj); // res.json or res.send both will do
+});
+
 // searching for all lectures
 router.get("/", (req, res) => {
   Course.find({})
@@ -124,6 +132,35 @@ router.post("/", async (req, res) => {
   }
 });
 
+// remove student from a course
+router.patch("/removeStudentFromCourse/:_id", async (req, res) => {
+  console.log("removeStudentFromCourse");
+  let { _id } = req.params;
+  let { studentId } = req.body;
+
+  try {
+    let course = await Course.findOne({ _id });
+    if (!course) {
+      res.status(404);
+      return res.json({
+        success: false,
+        message: "course not found.",
+      });
+    }
+    let newStudents = course.students.filter((student) => {
+      return student != studentId;
+    });
+    course.students = newStudents;
+
+    await course.save();
+    res.send("Student deleted");
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+// edit course
 router.patch("/:_id", async (req, res) => {
   //validate the inputs before making a new course
   console.log("patch");
