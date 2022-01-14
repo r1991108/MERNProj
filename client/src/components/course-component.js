@@ -115,31 +115,6 @@ const CourseComponent = (props) => {
     }
   }, [openModal]);
 
-  useEffect(() => {
-    if (currentUser.user.role == "student") {
-      let _id;
-      if (currentUser) {
-        _id = currentUser.user._id;
-      } else {
-        _id = "";
-      }
-      // console.log("getting data for student");
-      CourseService.getEnrolledCourses(_id)
-        .then((data) => {
-          if (data.data.length == 0) {
-            console.log(data);
-            setMessage("You haven't rolled any course yet");
-          } else {
-            console.log(data);
-            setCourseData(data.data);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [courseData]);
-
   return (
     <div style={{ padding: "3rem" }}>
       {!currentUser && (
