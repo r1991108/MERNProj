@@ -1,6 +1,11 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeComponent = () => {
+  const navigate = useNavigate();
+  const onPressRegister = () => {
+    navigate("/register");
+  };
   return (
     <main>
       <div className="container py-4">
@@ -17,11 +22,12 @@ const HomeComponent = () => {
                 information, such as credit card numbers.
               </p>
               <button
+                onClick={onPressRegister}
                 className="btn btn-outline-light"
                 type="button"
                 style={{ position: "absolute", bottom: "20px" }}
               >
-                Login or Register Now
+                Register Now
               </button>
             </div>
           </div>
@@ -38,11 +44,12 @@ const HomeComponent = () => {
                 credit card numbers.
               </p>
               <button
+                onClick={onprogress}
                 className="btn btn-outline-secondary"
                 type="button"
                 style={{ position: "absolute", bottom: "20px" }}
               >
-                Login or Register Now
+                Register Now
               </button>
             </div>
           </div>
