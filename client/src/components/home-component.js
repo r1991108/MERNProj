@@ -5,21 +5,31 @@ const HomeComponent = () => {
     <main>
       <div className="container py-4">
         <div className="row align-items-md-stretch">
-          <div className="col-md-6">
-            <div className="h-100 p-5 text-white bg-dark rounded-3">
-              <h2>As a student</h2>
+          <div className="col-md-6 ">
+            <div
+              className="h-100 p-5 text-white bg-dark rounded-3 "
+              style={{ position: "relative" }}
+            >
+              <h2 style={{ color: "white" }}>As a student</h2>
               <p>
                 Students can register in courses they like. This website is for
                 practice purpose only, so please do not provide any personal
                 information, such as credit card numbers.
               </p>
-              <button className="btn btn-outline-light" type="button">
+              <button
+                className="btn btn-outline-light"
+                type="button"
+                style={{ position: "absolute", bottom: "20px" }}
+              >
                 Login or Register Now
               </button>
             </div>
           </div>
           <div className="col-md-6">
-            <div className="h-100 p-5 bg-light border rounded-3">
+            <div
+              className="h-100 p-5 bg-light border rounded-3"
+              style={{ position: "relative" }}
+            >
               <h2>As an Instructor</h2>
               <p>
                 You can become an instructor by registering as one, and start
@@ -27,7 +37,11 @@ const HomeComponent = () => {
                 only, so please do not provide any personal information, such as
                 credit card numbers.
               </p>
-              <button className="btn btn-outline-secondary" type="button">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                style={{ position: "absolute", bottom: "20px" }}
+              >
                 Login or Register Now
               </button>
             </div>

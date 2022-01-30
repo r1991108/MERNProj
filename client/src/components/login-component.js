@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import AuthService from "../services/auth.service";
+import { useSelector } from "../redux/hooks";
 
 const LoginComponent = (props) => {
+  const isLogin = useSelector((state) => state.userInfo.isLogin);
+
   let { currentUser, setCurrentUser } = props;
   const navigate = useNavigate();
   let [email, setEmail] = useState("");
@@ -24,7 +27,7 @@ const LoginComponent = (props) => {
         window.alert(
           "login succesfully, you are now redirected to the profile page."
         );
-        setCurrentUser(AuthService.getCurrentUser());
+        setCurrentUser(JSON.parse(localStorage.getItem("user")));
         navigate("/profile");
       })
       .catch((error) => {

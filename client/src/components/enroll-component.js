@@ -72,6 +72,11 @@ const EnrollComponent = (props) => {
         <div className="search input-group mb-3">
           <input
             onChange={handleChangeInput}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
             type="text"
             class="form-control"
           />
